@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState} from 'react';
+import type { ReactNode } from 'react';
 
 const ADMIN_STORAGE_KEY = 'portfolio-admin-authenticated'
 const ADMIN_PASSWORD = 'Yogaarasu@2005'
