@@ -196,7 +196,7 @@ function ContactSocialLinks() {
       <h3 className="text-base font-bold text-slate-900 dark:text-slate-50 mb-4">
         Connect with me
       </h3>
-      <div className="space-y-3 ">
+      <div className="space-x-3 space-y-3">
         <SocialLink
           href="https://github.com/yogaarasu"
           icon="github"
