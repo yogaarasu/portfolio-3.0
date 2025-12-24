@@ -122,9 +122,9 @@ export function Hero() {
 
         <div className="flex flex-wrap items-center gap-4">
           <a
-            href="#"
+            href="/images/Yogaarasu-Resume.pdf"
             className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-accent-500 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:from-orange-600 hover:to-accent-600 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 animate-float-horizontal"
-          >
+            target="_blank" >
             Download Resume
           </a>
           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
