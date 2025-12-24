@@ -162,7 +162,7 @@ function SocialLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="inline-flex items-center gap-2 rounded-full border-2 border-slate-200 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-md transition-all duration-200 hover:text-white hover:shadow-lg dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-200 "
+      className="inline-flex items-center gap-2 rounded-full border-2 border-slate-200 bg-white/80 backdrop-blur-sm px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-md transition-all duration-200 hover:text-white hover:bg-black hover:shadow-lg dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-200 "
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = color
         e.currentTarget.style.backgroundColor = color
