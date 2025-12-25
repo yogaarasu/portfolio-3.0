@@ -204,7 +204,7 @@ function ContactSocialLinks() {
           color="#333"
         />
         <SocialLink
-          href="https://www.linkedin.com/feed/?trk=sem-ga_campid.14650114788_asid.151761418307_crid.657403558721_kw.linkedin%20login_d.c_tid.kwd-12704335873_n.g_mt.e_geo.9182246"
+          href="https://www.linkedin.com/in/yogaarasu-k-aa04a1326/"
           icon="linkedin"
           label="LinkedIn"
           color="#0077B5"
