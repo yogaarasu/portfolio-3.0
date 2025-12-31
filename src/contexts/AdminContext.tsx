@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState} from 'react';
 import type { ReactNode } from 'react';
 
-const ADMIN_STORAGE_KEY = 'portfolio-admin-authenticated'
-const ADMIN_PASSWORD = 'Yogaarasu@2005'
+const ADMIN_STORAGE_KEY = import.meta.env.VITE_ADMIN_STORAGE_KEY;
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
+
 
 type AdminContextValue = {
   isAuthenticated: boolean
