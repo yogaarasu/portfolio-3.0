@@ -5,7 +5,7 @@ export const projects: Project[] = [
     id: 'advanced-citylink',
     title: 'Citylink',
     description:
-      'One Platform. One Voice. A Better Tamil Nadu for Everyone.',
+      'Empowering every citizen with a direct line to local authorities. Report issues, track progress, and work together for a better community.',
     imageUrl:
       '/images/citylink.jpg',
     technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB'],
@@ -14,27 +14,27 @@ export const projects: Project[] = [
     level: 'Advanced',
   },
   {
-    id: 'advanced-ecommerce',
-    title: 'E‑Commerce Platform',
+    id: 'advanced-Mid-Day Meal Auto-Calculator',
+    title: 'Mid-Day Meal Auto-Calculator',
     description:
-      'Full-stack e‑commerce application with product search, filters, cart, and order tracking.',
+      'Simplifying the Mid-Day Meal scheme with smart automation. Just enter the student count, and the system instantly calculates daily food requirements while managing monthly stock reports accurately.',
     imageUrl:
-      'https://images.pexels.com/photos/5632375/pexels-photo-5632375.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    githubUrl: 'https://github.com/your-username/ecommerce-platform',
-    demoUrl: 'https://your-demo-url.com/ecommerce',
+      '/images/nmo.png',
+    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB'],
+    githubUrl: 'https://github.com/yogaarasu/School-Meal-Management',
+    demoUrl: 'https://nmo-eta.vercel.app/#/login',
     level: 'Advanced',
   },
   {
-    id: 'intermediate-portfolio',
-    title: 'Personal Portfolio',
+    id: 'gac360',
+    title: 'GAC360',
     description:
-      'Single‑page portfolio website with smooth scrolling, project gallery, and contact form.',
+      'A user-friendly website for Government Arts College, Coimbatore, designed to provide easy access to department details, faculty profiles, and campus news.',
     imageUrl:
-      'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    technologies: ['React', 'Tailwind CSS'],
-    githubUrl: 'https://github.com/your-username/portfolio',
-    demoUrl: 'https://your-demo-url.com/portfolio',
+      '/images/gac.png',
+    technologies: ['HTML', 'CSS', 'JavaScript'],
+    githubUrl: 'https://github.com/yogaarasu/college-management-system',
+    demoUrl: 'https://gac360.netlify.app/',
     level: 'Intermediate',
   },
   {
