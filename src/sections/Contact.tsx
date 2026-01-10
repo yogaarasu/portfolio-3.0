@@ -257,23 +257,22 @@ export function Contact() {
     return Object.keys(next).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
 
     try {
-      saveMessage({
-        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+      await saveMessage({
         name: form.name.trim(),
         email: form.email.trim(),
         phone: '',
         message: form.message.trim(),
-        createdAt: new Date().toISOString(),
       })
       setStatus('success')
       setForm({ name: '', email: '', message: '' })
       setErrors({})
-    } catch {
+    } catch (error) {
+      console.error('Error submitting form:', error)
       setStatus('error')
     }
   }

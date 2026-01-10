@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState} from 'react';
 import type { ReactNode } from 'react';
 
-const ADMIN_STORAGE_KEY = import.meta.env.VITE_ADMIN_STORAGE_KEY;
+const ADMIN_STORAGE_KEY = 'portfolio-admin-token';
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
 
@@ -19,13 +19,13 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === 'undefined') return
     const stored = window.localStorage.getItem(ADMIN_STORAGE_KEY)
-    setIsAuthenticated(stored === 'true')
+    setIsAuthenticated(stored === ADMIN_PASSWORD)
   }, [])
 
   const login = (password: string) => {
     const ok = password === ADMIN_PASSWORD
     if (ok) {
-      window.localStorage.setItem(ADMIN_STORAGE_KEY, 'true')
+      window.localStorage.setItem(ADMIN_STORAGE_KEY, password)
       setIsAuthenticated(true)
     }
     return ok

@@ -1,63 +1,104 @@
 import type { Message, Visit } from '../types'
 
-const MESSAGES_KEY = 'portfolio-messages'
-const VISITS_KEY = 'portfolio-visits'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
-function safeParse<T>(value: string | null, fallback: T): T {
-  if (!value) return fallback
+export async function getMessages(): Promise<Message[]> {
   try {
-    return JSON.parse(value) as T
-  } catch {
-    return fallback
+    const adminPassword = localStorage.getItem('portfolio-admin-token') || ''
+    const response = await fetch(`${API_BASE_URL}/messages`, {
+      headers: {
+        'Authorization': `Bearer ${adminPassword}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch messages')
+    }
+    
+    return await response.json()
+  } catch (error) {
+    console.error('Error fetching messages:', error)
+    return []
   }
 }
 
-export function getMessages(): Message[] {
-  if (typeof window === 'undefined') return []
-  const raw = window.localStorage.getItem(MESSAGES_KEY)
-  return safeParse<Message[]>(raw, [])
-}
-
-export function saveMessage(message: Message) {
-  if (typeof window === 'undefined') return
-  const existing = getMessages()
-  const next = [message, ...existing]
-  window.localStorage.setItem(MESSAGES_KEY, JSON.stringify(next))
-}
-
-export function deleteMessage(id: string) {
-  if (typeof window === 'undefined') return
-  const existing = getMessages()
-  const next = existing.filter((m) => m.id !== id)
-  window.localStorage.setItem(MESSAGES_KEY, JSON.stringify(next))
-}
-
-export function getVisits(): Visit[] {
-  if (typeof window === 'undefined') return []
-  const raw = window.localStorage.getItem(VISITS_KEY)
-  return safeParse<Visit[]>(raw, [])
-}
-
-export function incrementVisit() {
-  if (typeof window === 'undefined') return
-  const visits = getVisits()
-  const now = new Date()
-  const nowISO = now.toISOString()
-  
-  // Check if a visit was recorded in the last 5 seconds to prevent duplicates
-  const fiveSecondsAgo = new Date(now.getTime() - 5 * 1000)
-  const recentVisit = visits.find((v) => {
-    const visitTime = new Date(v.timestamp)
-    return visitTime >= fiveSecondsAgo
-  })
-  
-  // Only add visit if no recent visit exists (within last 5 seconds)
-  if (!recentVisit) {
-    const visit: Visit = {
-      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-      timestamp: nowISO,
+export async function saveMessage(message: Omit<Message, 'id' | 'createdAt'>): Promise<void> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    })
+    
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || 'Failed to save message')
     }
-    window.localStorage.setItem(VISITS_KEY, JSON.stringify([visit, ...visits]))
+  } catch (error) {
+    console.error('Error saving message:', error)
+    throw error
+  }
+}
+
+export async function deleteMessage(id: string): Promise<void> {
+  try {
+    const adminPassword = localStorage.getItem('portfolio-admin-token') || ''
+    const response = await fetch(`${API_BASE_URL}/messages/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${adminPassword}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (!response.ok) {
+      throw new Error('Failed to delete message')
+    }
+  } catch (error) {
+    console.error('Error deleting message:', error)
+    throw error
+  }
+}
+
+export async function getVisits(): Promise<Visit[]> {
+  try {
+    const adminPassword = localStorage.getItem('portfolio-admin-token') || ''
+    const response = await fetch(`${API_BASE_URL}/visits`, {
+      headers: {
+        'Authorization': `Bearer ${adminPassword}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch visits')
+    }
+    
+    const visits = await response.json()
+    return visits.map((visit: any) => ({
+      id: visit._id,
+      timestamp: visit.timestamp,
+    }))
+  } catch (error) {
+    console.error('Error fetching visits:', error)
+    return []
+  }
+}
+
+export async function incrementVisit(): Promise<void> {
+  try {
+    await fetch(`${API_BASE_URL}/visits`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  } catch (error) {
+    console.error('Error recording visit:', error)
+    // Silently fail for visit tracking to not disrupt user experience
   }
 }
 

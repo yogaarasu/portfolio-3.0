@@ -18,18 +18,26 @@ export function Admin() {
   // Load data when authenticated status changes
   useEffect(() => {
     if (isAuthenticated) {
-      // Initialize data from localStorage when authenticated
-      // Using startTransition to schedule state updates
-      startTransition(() => {
-        const currentMessages = getMessages()
-        const currentVisits = getVisits()
-        setMessages(currentMessages)
-        setVisits(currentVisits)
-      })
+      // Load data from API when authenticated
+      const loadData = async () => {
+        try {
+          const [currentMessages, currentVisits] = await Promise.all([
+            getMessages(),
+            getVisits()
+          ])
+          startTransition(() => {
+            setMessages(currentMessages)
+            setVisits(currentVisits)
+          })
+        } catch (error) {
+          console.error('Error loading admin data:', error)
+        }
+      }
+      loadData()
     }
   }, [isAuthenticated])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const ok = login(password)
     if (!ok) {
@@ -38,10 +46,16 @@ export function Admin() {
       setError(null)
       setPassword('')
       // Load data after successful login
-      const currentMessages = getMessages()
-      const currentVisits = getVisits()
-      setMessages(currentMessages)
-      setVisits(currentVisits)
+      try {
+        const [currentMessages, currentVisits] = await Promise.all([
+          getMessages(),
+          getVisits()
+        ])
+        setMessages(currentMessages)
+        setVisits(currentVisits)
+      } catch (error) {
+        console.error('Error loading admin data:', error)
+      }
       navigate('/admin')
     }
   }
@@ -201,11 +215,15 @@ export function Admin() {
                         variant="ghost"
                         size="sm"
                         className="w-full sm:w-auto text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40"
-                        onClick={() => {
-                          deleteMessage(m.id)
-                          setMessages((prev) =>
-                            prev.filter((msg) => msg.id !== m.id),
-                          )
+                        onClick={async () => {
+                          try {
+                            await deleteMessage(m.id)
+                            setMessages((prev) =>
+                              prev.filter((msg) => msg.id !== m.id),
+                            )
+                          } catch (error) {
+                            console.error('Error deleting message:', error)
+                          }
                         }}
                       >
                         Delete
