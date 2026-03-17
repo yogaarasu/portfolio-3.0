@@ -5,19 +5,19 @@ export const projects: Project[] = [
     id: 'advanced-citylink',
     title: 'Citylink',
     description:
-      'Empowering every citizen with a direct line to local authorities. Report issues, track progress, and work together for a better community.',
+      'Citylink is a full-stack civic engagement platform that bridges the gap between citizens and local administration. It features map-based issue reporting, real-time status tracking, and secure Role-Based Access Control to ensure transparent and efficient resolution of public grievances.',
     imageUrl:
-      '/images/citylink.jpg',
-    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB'],
-    githubUrl: 'https://github.com/yogaarasu/citylink-final',
-    demoUrl: 'https://citylink-yoga.vercel.app/',
+      '/images/citylink-banner.png',
+    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB', 'Leaflet(OSM)', 'Upstash Redis', 'Nodemailer', 'Cloudinary',],
+    githubUrl: 'https://github.com/yogaarasu/City-link',
+    demoUrl: 'https://citylink-tn.vercel.app/',
     level: 'Advanced',
   },
   {
     id: 'advanced-Mid-Day Meal Auto-Calculator',
     title: 'Mid-Day Meal Auto-Calculator',
     description:
-      'Simplifying the Mid-Day Meal scheme with smart automation. Just enter the student count, and the system instantly calculates daily food requirements while managing monthly stock reports accurately.',
+      'An automated inventory and calculation system engineered for Tamilnadu noon-meal scheme. Streamlines daily administrative workflows, reduces manual errors, and optimizes resource tracking for government schools.',
     imageUrl:
       '/images/nmo.png',
     technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB'],
@@ -29,7 +29,7 @@ export const projects: Project[] = [
     id: 'gac360',
     title: 'GAC360',
     description:
-      'A user-friendly website for Government Arts College, Coimbatore, designed to provide easy access to department details, faculty profiles, and campus news.',
+      'The official institutional web portal for Government Arts College. Designed with a focus on accessibility and modern UI/UX to deliver seamless academic updates and resources to students and faculty.',
     imageUrl:
       '/images/gac.png',
     technologies: ['HTML', 'CSS', 'JavaScript'],
