@@ -21,16 +21,16 @@ This is the Node.js/Express backend for the portfolio website with MongoDB integ
 
 1. **Install dependencies**:
    ```bash
-   cd backend
+   cd server
    npm install
    ```
 
 2. **Set up environment variables**:
    ```bash
-   # create backend/.env and add your values
+   # create server/.env and add your values
    ```
    
-   Use a single `backend/.env` file with your configuration:
+   Use a single `server/.env` file with your configuration:
    ```env
    NODE_ENV=development
    PORT=5000
