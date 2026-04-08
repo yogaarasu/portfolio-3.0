@@ -27,23 +27,20 @@ This is the Node.js/Express backend for the portfolio website with MongoDB integ
 
 2. **Set up environment variables**:
    ```bash
-   cp .env.example .env
+   # create backend/.env and add your values
    ```
    
-   Edit `.env` file with your configuration:
+   Use a single `backend/.env` file with your configuration:
    ```env
-   # MongoDB Configuration
-   MONGODB_URI=mongodb://localhost:27017/portfolio
-   
-   # Server Configuration
-   PORT=5000
    NODE_ENV=development
-   
-   # Admin Configuration
+   PORT=5000
+
+   MONGODB_URI=mongodb+srv://<db_user>:<db_password>@<cluster-url>/<db_name>?retryWrites=true&w=majority&appName=<app-name>
    ADMIN_PASSWORD=your_secure_admin_password_here
-   
-   # Frontend URL (for CORS)
-   FRONTEND_URL=http://localhost:5173
+   ADMIN_SESSION_SECRET=your_long_random_session_secret_here
+   ADMIN_SESSION_TTL_SECONDS=43200
+
+   FRONTEND_URLS=http://localhost:5173,https://your-portfolio-domain.vercel.app
    ```
 
 3. **Start MongoDB**:
@@ -73,11 +70,22 @@ This is the Node.js/Express backend for the portfolio website with MongoDB integ
 ### Health Check
 - `GET /api/health` - Server health status
 
+### Admin
+- `POST /api/admin/login` - Exchange admin password for access token
+- `GET /api/admin/verify` - Validate admin token
+
 ## Authentication
 
-Admin endpoints require authentication using the admin password:
+1. Login with your admin password:
+```http
+POST /api/admin/login
+Content-Type: application/json
+
+{ "password": "your_admin_password" }
 ```
-Authorization: Bearer your_admin_password
+2. Use the returned token on protected endpoints:
+```
+Authorization: Bearer <admin_token>
 ```
 
 ## Security Features
@@ -106,8 +114,6 @@ Authorization: Bearer your_admin_password
 ```javascript
 {
   timestamp: Date (required, automatic),
-  userAgent: String (optional),
-  ip: String (optional),
   createdAt: Date (automatic),
   updatedAt: Date (automatic)
 }
@@ -133,9 +139,9 @@ The server will automatically restart on file changes when using `npm run dev`.
 - Verify network connectivity
 
 ### CORS Issues
-- Ensure FRONTEND_URL matches your frontend URL
+- Ensure `FRONTEND_URLS` includes your frontend URL
 - Check that the frontend is making requests to the correct backend URL
 
 ### Authentication Issues
-- Verify ADMIN_PASSWORD is set correctly
-- Check Authorization header format: `Bearer password`
+- Verify `ADMIN_PASSWORD` and `ADMIN_SESSION_SECRET` are set correctly
+- Check Authorization header format: `Bearer <admin_token>`

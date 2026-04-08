@@ -11,8 +11,12 @@ import { Contact } from './sections/Contact'
 import { Admin } from './pages/Admin'
 import { incrementVisit } from './utils/storage'
 
+let hasTrackedVisitForThisPageLoad = false
+
 function App() {
   useEffect(() => {
+    if (hasTrackedVisitForThisPageLoad) return
+    hasTrackedVisitForThisPageLoad = true
     incrementVisit()
   }, [])
 

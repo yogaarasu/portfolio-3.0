@@ -4,11 +4,16 @@ import { authenticateAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
+const toVisitPayload = (visit) => ({
+  id: visit._id,
+  timestamp: visit.timestamp,
+});
+
 // GET all visits (admin only)
 router.get('/', authenticateAdmin, async (req, res) => {
   try {
     const visits = await Visit.find().sort({ timestamp: -1 });
-    res.json(visits);
+    res.json(visits.map(toVisitPayload));
   } catch (error) {
     console.error('Error fetching visits:', error);
     res.status(500).json({ error: 'Failed to fetch visits' });
@@ -18,26 +23,12 @@ router.get('/', authenticateAdmin, async (req, res) => {
 // POST new visit (track page view)
 router.post('/', async (req, res) => {
   try {
-    const now = new Date();
-    
-    // Check if a visit was recorded in the last 5 seconds to prevent duplicates
-    const fiveSecondsAgo = new Date(now.getTime() - 5 * 1000);
-    const recentVisit = await Visit.findOne({
-      timestamp: { $gte: fiveSecondsAgo }
-    });
-
-    if (recentVisit) {
-      return res.status(200).json({ message: 'Visit already recorded recently' });
-    }
-
     const newVisit = new Visit({
-      timestamp: now,
-      userAgent: req.get('User-Agent') || '',
-      ip: req.ip || req.connection.remoteAddress || ''
+      timestamp: new Date(),
     });
 
     const savedVisit = await newVisit.save();
-    res.status(201).json(savedVisit);
+    res.status(201).json(toVisitPayload(savedVisit));
   } catch (error) {
     console.error('Error recording visit:', error);
     res.status(500).json({ error: 'Failed to record visit' });

@@ -1,16 +1,27 @@
 import mongoose from 'mongoose';
 
+let connectPromise = null;
+
 export const connectDB = async () => {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  if (connectPromise) {
+    await connectPromise;
+    return mongoose.connection;
+  }
+
+  const dbName = process.env.MONGODB_DB_NAME || 'portfolio';
+  connectPromise = mongoose.connect(process.env.MONGODB_URI, { dbName });
+
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    
+    const conn = await connectPromise;
     console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error('Database connection error:', error);
-    process.exit(1);
+    console.log(`MongoDB Database: ${conn.connection.name}`);
+    return conn.connection;
+  } finally {
+    connectPromise = null;
   }
 };
 

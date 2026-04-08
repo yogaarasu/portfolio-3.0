@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import * as React from 'react'
-import { FaGithub, FaLinkedin, FaInstagram, FaWhatsapp } from 'react-icons/fa'
+import { FaEnvelope, FaGithub, FaLinkedin, FaPhoneAlt } from 'react-icons/fa'
 import { saveMessage } from '../utils/storage'
 import { Input } from '../components/ui/input'
 import { Textarea } from '../components/ui/textarea'
@@ -15,6 +15,7 @@ type FormState = {
 }
 
 type FormErrors = Partial<Record<keyof FormState, string>>
+type SocialIcon = 'github' | 'linkedin' | 'phone' | 'email'
 
 function ContactHeader() {
   const { ref, isVisible } = useScrollAnimation()
@@ -146,15 +147,15 @@ function SocialLink({
   color,
 }: {
   href: string
-  icon: string
+  icon: SocialIcon
   label: string
   color: string
 }) {
-  const iconMap: Record<string, React.ReactNode> = {
+  const iconMap: Record<SocialIcon, React.ReactNode> = {
     github: <FaGithub size={18} />,
     linkedin: <FaLinkedin size={18} />,
-    twitter: <FaInstagram size={18} />,
-    email: <FaWhatsapp size={18} />,
+    phone: <FaPhoneAlt size={18} />,
+    email: <FaEnvelope size={18} />,
   }
   return (
     <a
@@ -174,7 +175,9 @@ function SocialLink({
         e.currentTarget.style.boxShadow = ''
       }}
     >
-      {iconMap[icon]}
+      <span className="inline-flex h-[18px] w-[18px] items-center justify-center shrink-0">
+        {iconMap[icon]}
+      </span>
       {label}
     </a>
   )
@@ -211,7 +214,7 @@ function ContactSocialLinks() {
         />
         <SocialLink
           href="tel:+918248586511"
-          icon="email"
+          icon="phone"
           label="Phone"
           color="#1DA1F2"
         />

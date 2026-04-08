@@ -5,27 +5,13 @@ const visitSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     required: true
-  },
-  userAgent: {
-    type: String,
-    default: ''
-  },
-  ip: {
-    type: String,
-    default: ''
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  collection: 'visits'
 });
 
 // Add index for better query performance
 visitSchema.index({ timestamp: -1 });
-
-// Add compound index to prevent duplicate visits within 5 seconds
-visitSchema.index({ timestamp: 1 }, { 
-  unique: true,
-  sparse: true,
-  expireAfterSeconds: 300 // Expire after 5 minutes to clean up
-});
 
 export default mongoose.model('Visit', visitSchema);

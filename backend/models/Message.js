@@ -30,7 +30,8 @@ const messageSchema = new mongoose.Schema({
     default: Date.now
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  collection: 'messages'
 });
 
 // Add index for better query performance

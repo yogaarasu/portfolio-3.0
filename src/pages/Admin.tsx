@@ -1,14 +1,14 @@
 import { useState, useEffect, startTransition } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAdmin } from '../contexts/AdminContext'
-import { getMessages, getVisits, deleteMessage, deduplicateVisits } from '../utils/storage'
+import { getMessages, getVisits, deleteMessage } from '../utils/storage'
 import type { Message, Visit } from '../types'
 import { Button } from '../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Input } from '../components/ui/input'
 
 export function Admin() {
-  const { isAuthenticated, login, logout } = useAdmin()
+  const { isAuthenticated, isCheckingAuth, login, logout } = useAdmin()
   const navigate = useNavigate()
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -39,25 +39,28 @@ export function Admin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const ok = login(password)
-    if (!ok) {
-      setError('Incorrect password. Please try again.')
+    const result = await login(password)
+    if (!result.ok) {
+      setError(result.error || 'Incorrect password. Please try again.')
     } else {
       setError(null)
       setPassword('')
-      // Load data after successful login
-      try {
-        const [currentMessages, currentVisits] = await Promise.all([
-          getMessages(),
-          getVisits()
-        ])
-        setMessages(currentMessages)
-        setVisits(currentVisits)
-      } catch (error) {
-        console.error('Error loading admin data:', error)
-      }
       navigate('/admin')
     }
+  }
+
+  if (isCheckingAuth) {
+    return (
+      <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white px-4 py-24 dark:bg-slate-950">
+        <Card className="w-full max-w-md p-6 sm:p-8 shadow-xl">
+          <CardContent>
+            <p className="text-center text-sm text-slate-600 dark:text-slate-300">
+              Checking admin access...
+            </p>
+          </CardContent>
+        </Card>
+      </main>
+    )
   }
 
   if (!isAuthenticated) {
@@ -69,7 +72,7 @@ export function Admin() {
               Admin Login
             </CardTitle>
             <p className="text-sm text-slate-600 dark:text-slate-300">
-              This area is password‑protected. Only you should have access.
+              This area is password-protected. Only you should have access.
             </p>
           </CardHeader>
           <CardContent>
@@ -103,9 +106,7 @@ export function Admin() {
     )
   }
 
-  // Deduplicate visits by timestamp first, then sort
-  const deduplicatedVisits = deduplicateVisits(visits)
-  const visitsSorted = deduplicatedVisits.sort(
+  const visitsSorted = [...visits].sort(
     (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
   )
 
@@ -132,7 +133,7 @@ export function Admin() {
               Admin Dashboard
             </h1>
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-              View contact messages and visitor analytics. Data is stored locally in your browser.
+              View contact messages and visitor analytics from your MongoDB backend.
             </p>
           </div>
           <Button
@@ -249,7 +250,7 @@ export function Admin() {
                 {visitsSorted.length === 0 ? (
                   <div className="text-center py-6 sm:py-8">
                     <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                      No visits recorded yet. Opening the site will automatically record visits in local storage.
+                      No visits recorded yet. Opening the site will automatically record visits in the backend database.
                     </p>
                   </div>
                 ) : (
@@ -274,9 +275,11 @@ export function Admin() {
                                     second: '2-digit',
                                   })}
                                 </span>
-                                <span className="text-xs text-slate-500 dark:text-slate-400">
-                                  Visit #{visitsSorted.findIndex(visit => visit.id === v.id) + 1}
-                                </span>
+                                <div className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 flex flex-col sm:items-end">
+                                  <span>
+                                    Visit #{visitsSorted.findIndex(visit => visit.id === v.id) + 1}
+                                  </span>
+                                </div>
                               </div>
                             )
                           })}

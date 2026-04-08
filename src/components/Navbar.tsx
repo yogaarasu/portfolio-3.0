@@ -19,6 +19,8 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+  const logoClickCountRef = React.useRef(0)
+  const logoClickTimeoutRef = React.useRef<number | null>(null)
 
   const handleNavClick = (id: string) => {
     if (location.pathname !== '/') {
@@ -44,10 +46,42 @@ export function Navbar() {
     }
   }, [open])
 
+  React.useEffect(() => {
+    return () => {
+      if (logoClickTimeoutRef.current) {
+        window.clearTimeout(logoClickTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    logoClickCountRef.current += 1
+
+    if (logoClickTimeoutRef.current) {
+      window.clearTimeout(logoClickTimeoutRef.current)
+    }
+
+    if (logoClickCountRef.current >= 3) {
+      e.preventDefault()
+      logoClickCountRef.current = 0
+      setOpen(false)
+      navigate('/admin')
+      return
+    }
+
+    logoClickTimeoutRef.current = window.setTimeout(() => {
+      logoClickCountRef.current = 0
+    }, 700)
+  }
+
   return (
     <header className="fixed inset-x-0 top-0 z-30 border-b border-slate-200/60 bg-white/80 backdrop-blur-md dark:bg-slate-950/80 dark:border-slate-800/60 shadow-sm animate-fade-down">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link
+          to="/"
+          onClick={handleLogoClick}
+          className="flex items-center gap-3 group"
+        >
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-orange-500 via-primary-500 to-accent-500 shadow-lg flex items-center justify-center text-white font-bold text-lg transition-transform duration-300 group-hover:scale-110 group-hover:shadow-xl">
             Y
           </div>

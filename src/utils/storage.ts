@@ -1,22 +1,32 @@
 import type { Message, Visit } from '../types'
+import { ADMIN_TOKEN_STORAGE_KEY, API_BASE_URL } from '../config/auth'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const getAdminToken = () => localStorage.getItem(ADMIN_TOKEN_STORAGE_KEY) || ''
+
+const getAdminHeaders = () => ({
+  Authorization: `Bearer ${getAdminToken()}`,
+  'Content-Type': 'application/json',
+})
 
 export async function getMessages(): Promise<Message[]> {
   try {
-    const adminPassword = localStorage.getItem('portfolio-admin-token') || ''
     const response = await fetch(`${API_BASE_URL}/messages`, {
-      headers: {
-        'Authorization': `Bearer ${adminPassword}`,
-        'Content-Type': 'application/json',
-      },
+      headers: getAdminHeaders(),
     })
     
     if (!response.ok) {
       throw new Error('Failed to fetch messages')
     }
     
-    return await response.json()
+    const messages = await response.json()
+    return messages.map((message: any) => ({
+      id: message._id ?? message.id,
+      name: message.name,
+      email: message.email,
+      phone: message.phone ?? '',
+      message: message.message,
+      createdAt: message.createdAt,
+    }))
   } catch (error) {
     console.error('Error fetching messages:', error)
     return []
@@ -45,13 +55,9 @@ export async function saveMessage(message: Omit<Message, 'id' | 'createdAt'>): P
 
 export async function deleteMessage(id: string): Promise<void> {
   try {
-    const adminPassword = localStorage.getItem('portfolio-admin-token') || ''
     const response = await fetch(`${API_BASE_URL}/messages/${id}`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${adminPassword}`,
-        'Content-Type': 'application/json',
-      },
+      headers: getAdminHeaders(),
     })
     
     if (!response.ok) {
@@ -65,12 +71,8 @@ export async function deleteMessage(id: string): Promise<void> {
 
 export async function getVisits(): Promise<Visit[]> {
   try {
-    const adminPassword = localStorage.getItem('portfolio-admin-token') || ''
     const response = await fetch(`${API_BASE_URL}/visits`, {
-      headers: {
-        'Authorization': `Bearer ${adminPassword}`,
-        'Content-Type': 'application/json',
-      },
+      headers: getAdminHeaders(),
     })
     
     if (!response.ok) {
@@ -79,7 +81,7 @@ export async function getVisits(): Promise<Visit[]> {
     
     const visits = await response.json()
     return visits.map((visit: any) => ({
-      id: visit._id,
+      id: visit.id ?? visit._id,
       timestamp: visit.timestamp,
     }))
   } catch (error) {
@@ -100,20 +102,6 @@ export async function incrementVisit(): Promise<void> {
     console.error('Error recording visit:', error)
     // Silently fail for visit tracking to not disrupt user experience
   }
-}
-
-// Helper function to deduplicate visits by exact timestamp
-export function deduplicateVisits(visits: Visit[]): Visit[] {
-  const seen = new Map<string, Visit>()
-  for (const visit of visits) {
-    const timeKey = new Date(visit.timestamp).toISOString()
-    if (!seen.has(timeKey)) {
-      seen.set(timeKey, visit)
-    }
-  }
-  return Array.from(seen.values()).sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  )
 }
 
 

@@ -1,14 +1,23 @@
 import express from 'express';
 import Message from '../models/Message.js';
-import { authenticateAdmin } from '../middleware/auth.js';
+import { authenticateAdmin, contactFormLimiter } from '../middleware/auth.js';
 
 const router = express.Router();
+
+const toMessagePayload = (message) => ({
+  id: message._id,
+  name: message.name,
+  email: message.email,
+  phone: message.phone || '',
+  message: message.message,
+  createdAt: message.createdAt,
+});
 
 // GET all messages (admin only)
 router.get('/', authenticateAdmin, async (req, res) => {
   try {
     const messages = await Message.find().sort({ createdAt: -1 });
-    res.json(messages);
+    res.json(messages.map(toMessagePayload));
   } catch (error) {
     console.error('Error fetching messages:', error);
     res.status(500).json({ error: 'Failed to fetch messages' });
@@ -16,7 +25,7 @@ router.get('/', authenticateAdmin, async (req, res) => {
 });
 
 // POST new message
-router.post('/', async (req, res) => {
+router.post('/', contactFormLimiter, async (req, res) => {
   try {
     const { name, email, phone, message } = req.body;
 
@@ -47,7 +56,7 @@ router.post('/', async (req, res) => {
     });
 
     const savedMessage = await newMessage.save();
-    res.status(201).json(savedMessage);
+    res.status(201).json(toMessagePayload(savedMessage));
   } catch (error) {
     console.error('Error saving message:', error);
     res.status(500).json({ error: 'Failed to save message' });
