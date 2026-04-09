@@ -14,15 +14,15 @@ export const projects: Project[] = [
     level: 'Advanced',
   },
   {
-    id: 'advanced-Mid-Day Meal Auto-Calculator',
-    title: 'Mid-Day Meal Auto-Calculator',
+    id: 'advanced-TN NMO',
+    title: 'TN NMO',
     description:
       'An automated inventory and calculation system engineered for Tamilnadu noon-meal scheme. Streamlines daily administrative workflows, reduces manual errors, and optimizes resource tracking for government schools.',
     imageUrl:
-      '/images/nmo.png',
+      '/images/tn-nmo-p1.png',
     technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB'],
     githubUrl: 'https://github.com/yogaarasu/School-Meal-Management',
-    demoUrl: 'https://nmo-eta.vercel.app/#/login',
+    demoUrl: 'https://tn-nmo.vercel.app/login',
     level: 'Advanced',
   },
   {
@@ -41,7 +41,7 @@ export const projects: Project[] = [
     id: 'intermediate-chat-app',
     title: 'Real‑Time Chat App',
     description:
-      'Real‑time chat application with rooms, typing indicators, and online presence.',
+      'Status: In Active Development',
     imageUrl:
       'https://images.pexels.com/photos/1181216/pexels-photo-1181216.jpeg?auto=compress&cs=tinysrgb&w=1200',
     technologies: ['React', 'Node.js', 'Socket.IO'],
@@ -53,7 +53,7 @@ export const projects: Project[] = [
     id: 'basic-todo',
     title: 'Smart To‑Do List',
     description:
-      'A clean to‑do list with filtering, local storage persistence, and keyboard shortcuts.',
+      'Status: In Active Development',
     imageUrl:
       'https://images.pexels.com/photos/2706379/pexels-photo-2706379.jpeg?auto=compress&cs=tinysrgb&w=1200',
     technologies: ['React', 'TypeScript'],
@@ -65,7 +65,7 @@ export const projects: Project[] = [
     id: 'basic-landing',
     title: 'Marketing Landing Page',
     description:
-      'High‑converting product landing page with responsive layout and animated hero section.',
+      'Status: In Active Development',
     imageUrl:
       'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=1200',
     technologies: ['HTML', 'CSS', 'JavaScript'],
