@@ -14,6 +14,18 @@ export const projects: Project[] = [
     level: 'Advanced',
   },
   {
+    id: 'advanced-adfrio',
+    title: 'Adfrio',
+    description:
+      'Adfrio is a modern streaming platform that lets users discover and enjoy music and video content in one seamless experience, with smooth playback, personalized playlists, and secure account access.',
+    imageUrl:
+      '/images/adfrio-p.png',
+    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'Express', 'MongoDB', 'Nodemailer', 'Google OAuth'],
+    githubUrl: 'https://github.com/yogaarasu/Adfrio-26',
+    demoUrl: 'https://adfrio.vercel.app',
+    level: 'Advanced',
+  },
+  {
     id: 'advanced-TN NMO',
     title: 'TN NMO',
     description:
