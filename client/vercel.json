@@ -4,6 +4,6 @@
   "installCommand": "npm install",
   "framework": "vite",
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/" }
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" }
   ]
 }
